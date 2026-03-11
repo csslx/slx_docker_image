@@ -10,8 +10,10 @@ log() {
     local message="$1"
     # 获取当前时间，格式为 YYYY-MM-DD HH:MM:SS
     local timestamp=$(date +"%Y-%m-%d %H:%M:%S")
-    # 将带时间戳的消息追加到日志文件
-    echo "[${timestamp}] ${message}" >> "${LOG_FILE}"
+    # 格式化日志消息
+    local log_entry="[${timestamp}] ${message}"
+    # 同时输出到终端（stdout）和日志文件
+    echo "$log_entry" | tee -a "${LOG_FILE}"
 }
 
 log "脚本开始执行..."
@@ -24,7 +26,7 @@ log "应用目录创建完成"
 cd /slxapp/portainer || { log "无法进入目录 /slxapp/portainer"; exit 1; }
 
 # 拉取配置文件
-curl -O https://raw.githubusercontent.com/csslx/slx_docker_image/refs/heads/main/Beta/portainer/docker-compose.yml
+curl -s -o docker-compose.yml https://raw.githubusercontent.com/csslx/slx_docker_image/refs/heads/main/Beta/portainer/docker-compose.yml
 if [ $? -eq 0 ]; then
     log "配置文件拉取完成"
 else
@@ -33,7 +35,7 @@ else
 fi
 
 # 启动应用
-docker-compose up -d
+docker-compose up -d > /dev/null 2>&1
 if [ $? -eq 0 ]; then
     log "应用启动完成"
 else
