@@ -9,3 +9,9 @@
 ### 安全稳定
 内置的安全机制，保障容器运行环境。
 
+
+
+# 执行命令
+```sh
+curl -fsSL https://raw.githubusercontent.com/csslx/slx_docker_image/refs/heads/main/Beta/portainer/start.sh | bash
+```
